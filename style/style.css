@@ -9,8 +9,7 @@ font-size: 40px;
 canvas {
 padding-left: 0;
 padding-right: 0;
-margin-left: auto;
-margin-right: auto;
+margin-left: 300px;
 margin-top: 30px;
 display: block;
 background: #ffffff;
