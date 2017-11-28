@@ -10,3 +10,12 @@ this.update = function(){
       this.context.fill();
     }
 }
+function goalPost(width , color,context,canvasWidth,canvasHeight)
+{
+  context.lineWidth=100;
+  context.moveTo(canvasWidth/2-width/2,0);
+  context.lineTo(canvasWidth/2+width/2,0);
+  context.moveTo(canvasWidth/2-width/2,canvasHeight);
+  context.lineTo(canvasWidth/2+width/2,canvasHeight);
+  context.stroke();
+}
