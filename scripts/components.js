@@ -44,6 +44,19 @@ function hockey(radius, color, x, y,context)
         context.fill();
       }
 }
+function opponentHockey(radius, color, x, y,context)
+{
+  this.x = x;
+  this.y = y;
+  var context=context;
+  var radius = radius;
+  var color=color;
+  this.update = function(){
+        context.fillStyle = color;
+        context.arc(this.x,this.y,radius,0,2*Math.PI);
+        context.fill();
+      }
+}
 function drawCentreLine(color,context,canvasWidth,canvasHeight)
 {
   var canvasWidth = canvasWidth;

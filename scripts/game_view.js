@@ -1,4 +1,10 @@
 var lastX,lastY,newX,newY;
+var url='http://127.0.0.1:4000/'
+var room="1";
+var socket = io.connect(url);
+socket.on('connect', function() {
+   socket.emit('room', room);
+});
 var win=false;
 var gameArena={
   canvas:document.getElementById('canvas'),
@@ -19,7 +25,8 @@ var gameArena={
     this.context=canvas.getContext("2d"),
     this.ball=new ball(this.ballRadius, "red", this.canvasWidth/2, this.canvasHeight/2,this.context),
     this.goalPost=new goalPost(this.canvasWidth/2, "black", this.context,this.canvasWidth,this.canvasHeight),
-    this.hockey=new hockey(this.hockeyRadius, "red", 20, 20,this.context),
+    this.hockey=new hockey(this.hockeyRadius, "red", this.canvasWidth/2, 3*this.canvasHeight/4,this.context),
+    this.oppoHockey=new opponentHockey(this.hockeyRadius, "red", 20, 20,this.context),
     this.centerLine=new drawCentreLine("black", this.context,this.canvasWidth,this.canvasHeight)
     this.winningText=new drawText("red", this.context,this.canvasWidth,this.canvasHeight)
   },
@@ -36,19 +43,30 @@ var gameArena={
 gameArena.intialize();
 gameArena.start();
 gameArena.canvas.addEventListener('mousemove', function (e) {
-  newX=e.pageX-gameArena.canvasMarginRight;
-  newY=e.pageY-gameArena.canvasMargintop;
-  gameArena.hockey.x=newX;gameArena.hockey.y=newY;
-  if(Math.abs(gameArena.ball.x-gameArena.hockey.x)<=2*gameArena.ballRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)<=2*gameArena.ballRadius)
+  if(e.pageY-gameArena.canvasMargintop>=gameArena.canvasWidth/2)
   {
-    ballHockeyCollision();}
-    lastX=e.pageX-gameArena.canvasMarginRight;
-    lastY=e.pageY-gameArena.canvasMargintop;
+    newX=e.pageX-gameArena.canvasMarginRight;
+    newY=e.pageY-gameArena.canvasMargintop;
+    gameArena.hockey.x=newX;gameArena.hockey.y=newY;
+    socket.emit('hockey_coordinates', {
+      room:room,
+      hockey:{
+        x:gameArena.canvasWidth-newX,
+        y:gameArena.canvasHeight-newY
+      }
+    });
+    if(Math.abs(gameArena.ball.x-gameArena.hockey.x)<=2*gameArena.ballRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)<=2*gameArena.ballRadius)
+    {
+      ballHockeyCollision();}
+      lastX=e.pageX-gameArena.canvasMarginRight;
+      lastY=e.pageY-gameArena.canvasMargintop;
+    }
   })
   gameArena.ball.update();
   function updateGameArena() {
     gameArena.clear();
     gameArena.hockey.update();
+    gameArena.oppoHockey.update();
     gameArena.centerLine.drawLine();
     gameArena.goalPost.drawLine();
     if(win==true)
@@ -59,7 +77,7 @@ gameArena.canvas.addEventListener('mousemove', function (e) {
     gameArena.xDirection*=-1;
     if((gameArena.ball.y+gameArena.ballRadius >= gameArena.canvasHeight-5 || gameArena.ball.y-gameArena.ballRadius <= 0) && win !=true)
     gameArena.yDirection*=-1;
-    if((gameArena.ball.x+gameArena.ballRadius >= gameArena.canvasWidth/4 && gameArena.ball.x+gameArena.ballRadius <= 3*gameArena.canvasWidth/4)&&(ball.y+gameArena.ballRadius>=gameArena.canvasHeight-10 || gameArena.ball.y-gameArena.ballRadius<=10))
+    if((gameArena.ball.x+gameArena.ballRadius >= gameArena.canvasWidth/4 && ball.x+gameArena.ballRadius <= 3*gameArena.canvasWidth/4)&&(ball.y+gameArena.ballRadius>=gameArena.canvasHeight-10 || gameArena.ball.y-gameArena.ballRadius<=10))
     {
       win=true;
       goal();
