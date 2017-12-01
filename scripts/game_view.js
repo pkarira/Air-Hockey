@@ -16,8 +16,8 @@ var gameArena={
     this.canvas.width= this.canvasWidth;
     this.canvas.height=this.canvasHeight;
     this.ballRadius=20,
-    this.xDirection=1,
-    this.yDirection=1,
+    this.xDirection=0,
+    this.yDirection=0,
     this.win =false,
     //var canvasMarginRight=screen.width/2-canvasWidth/2;
     this.canvasMarginRight=300,
@@ -91,6 +91,13 @@ gameArena.canvas.addEventListener('mousemove', function (e) {
     var xDiff=newX-lastX;
     var yDiff=newY-lastY;
     console.log("collision");
+    socket.emit('ball_coordinates', {
+      room:room,
+      ball:{
+        xDirection:xDiff*(-1),
+        yDirection:yDiff*(-1)
+      }
+    });
     gameArena.xDirection=xDiff;
     gameArena.yDirection=yDiff;
   }

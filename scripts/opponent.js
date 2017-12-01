@@ -1,20 +1,10 @@
-//var url='https://sync-call.herokuapp.com/';
 var url='http://127.0.0.1:4000/'
 var room="1";
 var socket = io.connect(url);
-// btn.addEventListener('click', function(){
-//   player.pause()
-//   clearInterval(window.textColor);
-//   document.getElementById('name').value= "";
-//   document.getElementById('number').value=  "";
-//   socket.emit('reject', {
-//     message: "reject",
-//     room: room
-//   });
-// });
 socket.on('ball_coordinates', function(data){
-    gameArena.ball.x=data.ball.x;
-    gameArena.ball.y=data.ball.y;
+    console.log("received ball cordinates");
+    gameArena.xDirection=data.ball.xDirection;
+    gameArena.yDirection=data.ball.yDirection;
 });
 socket.on('hockey_coordinates', function(data){
   console.log("received");
