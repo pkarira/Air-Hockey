@@ -35,6 +35,7 @@ var gameArena={
   start:function()
   {
     setInterval(updateGameArena,10);
+    scoreBoard.updateScore(this.myScore,this.oppoScore);
   },
   clear:function()
   {
@@ -86,7 +87,11 @@ gameArena.canvas.addEventListener('mousemove', function (e) {
     {
       gameArena.result=true;
       if(gameArena.ball.y<gameArena.canvasHeight/2)
-      gameArena.win=true;
+      {gameArena.myScore+=1;
+      gameArena.win=true;}
+      else
+      {gameArena.oppoScore+=1;}
+      scoreBoard.updateScore(gameArena.myScore,gameArena.oppoScore);
       goal();
     }
     gameArena.ball.x+=gameArena.xDirection;
