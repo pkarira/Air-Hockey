@@ -21,7 +21,7 @@ function goalPost(width,color,context,canvasWidth,canvasHeight)
   var color=color;
   this.drawLine=function()
   {
-  context.lineWidth=10;
+  context.lineWidth=20;
   context.beginPath();
   context.moveTo(canvasWidth/2-width/2,0);
   context.lineTo(canvasWidth/2+width/2,0);
@@ -71,16 +71,4 @@ function drawCentreLine(color,context,canvasWidth,canvasHeight)
   context.lineTo(canvasWidth,canvasHeight/2);
   context.stroke();
   }
-}
-function drawText(color,context,canvasWidth,canvasHeight)
-{
-  var canvasWidth = canvasWidth;
-  var canvasHeight = canvasHeight;
-  var context=context;
-  var color=color;
-  this.draw=function()
-  {
-  context.font = "30px Arial";
-  context.fillText("You win",canvasWidth/2,canvasHeight/2);
-}
 }

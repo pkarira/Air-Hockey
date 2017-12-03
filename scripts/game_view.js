@@ -5,7 +5,6 @@ var socket = io.connect(url);
 socket.on('connect', function() {
    socket.emit('room', room);
 });
-var win=false;
 var gameArena={
   canvas:document.getElementById('canvas'),
   intialize:function()
@@ -13,12 +12,16 @@ var gameArena={
     this.canvasWidth=500;
     this.canvasHeight=600;
     this.hockeyRadius=20;
+    this.myScore=0;
+    this.oppoScore=0;
     this.canvas.width= this.canvasWidth;
     this.canvas.height=this.canvasHeight;
     this.ballRadius=20,
     this.xDirection=0,
     this.yDirection=0,
     this.win =false,
+    this.result =false,
+    this.borderWidth=10;
     //var canvasMarginRight=screen.width/2-canvasWidth/2;
     this.canvasMarginRight=300,
     this.canvasMargintop=30,
@@ -28,7 +31,6 @@ var gameArena={
     this.hockey=new hockey(this.hockeyRadius, "red", this.canvasWidth/2, 3*this.canvasHeight/4,this.context),
     this.oppoHockey=new opponentHockey(this.hockeyRadius, "red", 20, 20,this.context),
     this.centerLine=new drawCentreLine("black", this.context,this.canvasWidth,this.canvasHeight)
-    this.winningText=new drawText("red", this.context,this.canvasWidth,this.canvasHeight)
   },
   start:function()
   {
@@ -56,8 +58,7 @@ gameArena.canvas.addEventListener('mousemove', function (e) {
       }
     });
     if(Math.abs(gameArena.ball.x-gameArena.hockey.x)<=2*gameArena.ballRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)<=2*gameArena.ballRadius)
-    {
-      ballHockeyCollision();}
+    {ballHockeyCollision();}
       lastX=e.pageX-gameArena.canvasMarginRight;
       lastY=e.pageY-gameArena.canvasMargintop;
     }
@@ -69,17 +70,23 @@ gameArena.canvas.addEventListener('mousemove', function (e) {
     gameArena.oppoHockey.update();
     gameArena.centerLine.drawLine();
     gameArena.goalPost.drawLine();
-    if(win==true)
+    canvas_border(gameArena.context,"black",gameArena.canvasWidth,gameArena.canvasHeight,gameArena.borderWidth);
+    if(gameArena.result==true)
     {
-      gameArena.winningText.draw();
+      if(gameArena.win==true)
+      drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Won");
+      else
+      drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Loose");
     }
-    if(gameArena.ball.x+gameArena.ballRadius >= gameArena.canvasWidth || gameArena.ball.x-gameArena.ballRadius <= 0)
+    if((gameArena.ball.x+gameArena.ballRadius >= gameArena.canvasWidth || gameArena.ball.x-gameArena.ballRadius <= 0)&& gameArena.result !=true)
     gameArena.xDirection*=-1;
-    if((gameArena.ball.y+gameArena.ballRadius >= gameArena.canvasHeight-5 || gameArena.ball.y-gameArena.ballRadius <= 0) && win !=true)
+    if((gameArena.ball.y+gameArena.ballRadius >= gameArena.canvasHeight || gameArena.ball.y-gameArena.ballRadius <= 0) && gameArena.result !=true)
     gameArena.yDirection*=-1;
-    if((gameArena.ball.x+gameArena.ballRadius >= gameArena.canvasWidth/4 && ball.x+gameArena.ballRadius <= 3*gameArena.canvasWidth/4)&&(ball.y+gameArena.ballRadius>=gameArena.canvasHeight-10 || gameArena.ball.y-gameArena.ballRadius<=10))
+    if((gameArena.ball.x>= gameArena.canvasWidth/4 && gameArena.ball.x<= 3*gameArena.canvasWidth/4)&&(gameArena.ball.y>=gameArena.canvasHeight-40 || gameArena.ball.y<=40))
     {
-      win=true;
+      gameArena.result=true;
+      if(gameArena.ball.y<gameArena.canvasHeight/2)
+      gameArena.win=true;
       goal();
     }
     gameArena.ball.x+=gameArena.xDirection;
