@@ -3,18 +3,28 @@ var scoreBoard={
   canvasWidth:400,
   canvasHeight:300,
   borderWidth:10,
-  initialCanvas:function()
+  intialize:function()
   {
-    this.context=scoreBoard.canvas.getContext("2d"),
+    this.context=this.canvas.getContext("2d");
+  },
+  canvasDecor:function()
+  {
     canvas_border(this.context,"black",scoreBoard.canvasWidth,scoreBoard.canvasHeight,scoreBoard.borderWidth);
     drawText("red",this.context,scoreBoard.canvasWidth/2-40,40,"Score");
     drawText("red",this.context,20,80,"You");
     drawText("red",this.context,scoreBoard.canvasWidth/2+20,80,"Opponent");
   },
+  clear:function()
+  {
+    this.context.clearRect(0, 0, this.canvasWidth,this.canvasHeight);
+    this.context.beginPath();
+  },
   updateScore:function(player1,player2)
   {
+    this.clear();
+    this.canvasDecor();
     drawText("red",this.context,20,150,player1);
     drawText("red",this.context,scoreBoard.canvasWidth/2+20,150,player2);
   }
 }
-scoreBoard.initialCanvas();
+scoreBoard.intialize();

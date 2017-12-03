@@ -3,7 +3,7 @@ var url='http://127.0.0.1:4000/'
 var room="1";
 var socket = io.connect(url);
 socket.on('connect', function() {
-   socket.emit('room', room);
+  socket.emit('room', room);
 });
 var gameArena={
   canvas:document.getElementById('canvas'),
@@ -14,6 +14,7 @@ var gameArena={
     this.hockeyRadius=20;
     this.myScore=0;
     this.oppoScore=0;
+    this.rounds=7;
     this.canvas.width= this.canvasWidth;
     this.canvas.height=this.canvasHeight;
     this.ballRadius=20,
@@ -22,7 +23,6 @@ var gameArena={
     this.win =false,
     this.result =false,
     this.borderWidth=10;
-    //var canvasMarginRight=screen.width/2-canvasWidth/2;
     this.canvasMarginRight=300,
     this.canvasMargintop=30,
     this.context=canvas.getContext("2d"),
@@ -41,6 +41,15 @@ var gameArena={
   {
     this.context.clearRect(0, 0, this.canvasWidth,this.canvasHeight);
     this.context.beginPath();
+  },
+  restart:function()
+  {
+    this.xDirection=0,
+    this.yDirection=0,
+    this.win =false,
+    this.result =false,
+    this.ball.x=this.canvasWidth/2,
+    this.ball.y=this.canvasHeight/2
   }
 }
 gameArena.intialize();
@@ -60,34 +69,41 @@ gameArena.canvas.addEventListener('mousemove', function (e) {
     });
     if(Math.abs(gameArena.ball.x-gameArena.hockey.x)<=2*gameArena.ballRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)<=2*gameArena.ballRadius)
     {ballHockeyCollision();}
-      lastX=e.pageX-gameArena.canvasMarginRight;
-      lastY=e.pageY-gameArena.canvasMargintop;
-    }
-  })
-  gameArena.ball.update();
-  function updateGameArena() {
-    gameArena.clear();
-    gameArena.hockey.update();
-    gameArena.oppoHockey.update();
-    gameArena.centerLine.drawLine();
-    gameArena.goalPost.drawLine();
-    canvas_border(gameArena.context,"black",gameArena.canvasWidth,gameArena.canvasHeight,gameArena.borderWidth);
-    if(gameArena.result==true)
+    lastX=e.pageX-gameArena.canvasMarginRight;
+    lastY=e.pageY-gameArena.canvasMargintop;
+  }
+})
+gameArena.ball.update();
+function updateGameArena() {
+  gameArena.clear();
+  gameArena.hockey.update();
+  gameArena.oppoHockey.update();
+  gameArena.centerLine.drawLine();
+  gameArena.goalPost.drawLine();
+  canvas_border(gameArena.context,"black",gameArena.canvasWidth,gameArena.canvasHeight,gameArena.borderWidth);
+  if(gameArena.result==true)
+  {
+    if(gameArena.win==true)
+    drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Won");
+    else
+    drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Loose");
+    if(gameArena.rounds>0)
     {
-      if(gameArena.win==true)
-      drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Won");
-      else
-      drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Loose");
+      gameArena.rounds--;
+      setTimeout(function (){
+        gameArena.restart();
+      }, 2000);
     }
-    if((gameArena.ball.x+gameArena.ballRadius >= gameArena.canvasWidth || gameArena.ball.x-gameArena.ballRadius <= 0)&& gameArena.result !=true)
-    gameArena.xDirection*=-1;
-    if((gameArena.ball.y+gameArena.ballRadius >= gameArena.canvasHeight || gameArena.ball.y-gameArena.ballRadius <= 0) && gameArena.result !=true)
-    gameArena.yDirection*=-1;
-    if((gameArena.ball.x>= gameArena.canvasWidth/4 && gameArena.ball.x<= 3*gameArena.canvasWidth/4)&&(gameArena.ball.y>=gameArena.canvasHeight-40 || gameArena.ball.y<=40))
-    {
-      gameArena.result=true;
-      if(gameArena.ball.y<gameArena.canvasHeight/2)
-      {gameArena.myScore+=1;
+  }
+  if((gameArena.ball.x+gameArena.ballRadius >= gameArena.canvasWidth || gameArena.ball.x-gameArena.ballRadius <= 0)&& gameArena.result !=true)
+  gameArena.xDirection*=-1;
+  if((gameArena.ball.y+gameArena.ballRadius >= gameArena.canvasHeight || gameArena.ball.y-gameArena.ballRadius <= 0) && gameArena.result !=true)
+  gameArena.yDirection*=-1;
+  if((gameArena.ball.x>= gameArena.canvasWidth/4 && gameArena.ball.x<= 3*gameArena.canvasWidth/4)&&(gameArena.ball.y>=gameArena.canvasHeight-40 || gameArena.ball.y<=40) && gameArena.result!=true)
+  {
+    gameArena.result=true;
+    if(gameArena.ball.y<gameArena.canvasHeight/2)
+    {gameArena.myScore+=1;
       gameArena.win=true;}
       else
       {gameArena.oppoScore+=1;}
