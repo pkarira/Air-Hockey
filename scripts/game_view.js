@@ -1,7 +1,7 @@
-var lastX,lastY,newX,newY;
-var url='http://127.0.0.1:4000/'
-var room="1";
-var socket = io.connect(url);
+var lastX,lastY,newX,newY,
+url='http://127.0.0.1:4000/',
+room="1",
+socket = io.connect(url);
 socket.on('connect', function() {
   socket.emit('room', room);
 });

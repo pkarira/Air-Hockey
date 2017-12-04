@@ -1,17 +1,22 @@
-var express=require('express');
-var socket = require('socket.io');
-var io = socket(server);
-var app=express();
-var path = require('path');
+var express=require('express'),
+socket = require('socket.io'),
+io = socket(server),
+bodyParser = require('body-parser'),
+app=express(),
+path = require('path'),
+jsonParser = bodyParser.json(),
+urlParser = bodyParser.urlencoded({extended:false}),
+server =app.listen(process.env.PORT || 4000,function(){
+}),
+game = require('./app/controllers/game_controller'),
+io = socket(server);
 app.set('view engine','ejs');
 app.use('/style/',express.static('style'));
 app.set('views', path.join(__dirname, 'app/views'));
-var server =app.listen(process.env.PORT || 4000,function(){
-});
-var game = require('./app/controllers/game_controller');
 app.use('/scripts/',express.static('scripts'));
+app.get('/',game.login);
+app.post('/gamearena',urlParser,game.getRoom);
 app.get('/gamearena',game.getGameArena);
-var io = socket(server);
 io.on('connection',function(socket) {
     console.log('made socket connection', socket.id);
     socket.on('room', function(room) {

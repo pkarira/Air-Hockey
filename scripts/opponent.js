@@ -1,6 +1,5 @@
-var url='http://127.0.0.1:4000/'
-var room="1";
-var socket = io.connect(url);
+var url='http://127.0.0.1:4000/',
+socket = io.connect(url);
 socket.on('ball_coordinates', function(data){
     console.log("received ball cordinates");
     gameArena.xDirection=data.ball.xDirection;
