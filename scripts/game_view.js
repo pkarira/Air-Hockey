@@ -1,7 +1,9 @@
 var lastX,lastY,newX,newY,
 url='http://127.0.0.1:4000/',
-room="1",
 socket = io.connect(url);
+if (typeof(Storage) !== "undefined") {
+  room=localStorage.getItem("room");
+}
 socket.on('connect', function() {
   socket.emit('room', room);
 });

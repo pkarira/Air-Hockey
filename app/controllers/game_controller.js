@@ -11,10 +11,9 @@ module.exports.getRoom=function(request,response)
 {
   var room=request.body.room,rows;
   var roomQuery = format('SELECT * FROM rooms WHERE room = %L', room)
-  const query = client.query(ageQuery, (err, res) => {
+  const query = client.query(roomQuery, (err, res) => {
     rows=res.rows;
-  });
-  if(rows.size()>0)
+  if(rows.length>0)
   {
     var roomQuery = format('DELETE FROM rooms WHERE room = %L', room)
     const query = client.query(roomQuery, (err, res) => {
@@ -23,6 +22,7 @@ module.exports.getRoom=function(request,response)
     roomAuth=true;
   }
   response.send("done");
+    });
 };
 module.exports.getGameArena=function(request,response)
 {
@@ -35,18 +35,18 @@ module.exports.getGameArena=function(request,response)
   };
   module.exports.login=function(request,response)
   {
-    roomId=makeid()
+    roomId=makeId()
     response.render("login",{id:roomId});
   };
-  function makeid() {
+  function makeId() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     for (var i = 0; i < 5; i++)
     text += possible.charAt(Math.floor(Math.random() * possible.length));
-    var roomQuery = format('INSERT INTO rooms (room) VALUES (%s)', roomId)
-    const query = client.query(roomQuery, (err, res) => {
-      // console.log(res.rows);
+    var roomId = new Array(text);
+    const query = client.query('INSERT INTO rooms (room) VALUES ($1)', roomId, function(err,result){
+    console.log(result);
     });
     return text;
   }
