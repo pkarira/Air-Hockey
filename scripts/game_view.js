@@ -16,6 +16,7 @@ var gameArena={
     this.hockeyRadius=20;
     this.myScore=0;
     this.oppoScore=0;
+
     this.rounds=7;
     this.canvas.width= this.canvasWidth;
     this.canvas.height=this.canvasHeight;
@@ -52,6 +53,7 @@ var gameArena={
     this.result =false,
     this.ball.x=this.canvasWidth/2,
     this.ball.y=this.canvasHeight/2
+    this.rounds--;
   }
 }
 gameArena.intialize();
@@ -89,13 +91,6 @@ function updateGameArena() {
     drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Won");
     else
     drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Loose");
-    if(gameArena.rounds>0)
-    {
-      gameArena.rounds--;
-      setTimeout(function (){
-        gameArena.restart();
-      }, 2000);
-    }
   }
   if((gameArena.ball.x+gameArena.ballRadius >= gameArena.canvasWidth || gameArena.ball.x-gameArena.ballRadius <= 0)&& gameArena.result !=true)
   gameArena.xDirection*=-1;
@@ -105,8 +100,21 @@ function updateGameArena() {
   {
     gameArena.result=true;
     if(gameArena.ball.y<gameArena.canvasHeight/2)
-    {gameArena.myScore+=1;
-      gameArena.win=true;}
+    {
+      gameArena.myScore+=1;
+      gameArena.win=true;
+      if(gameArena.rounds>1)
+      {
+        console.log(gameArena.rounds);
+        setTimeout(function (){
+          gameArena.restart();
+        }, 2000);
+      }else
+      if(gameArena.rounds==0)
+      {
+        
+      }
+    }
       else
       {gameArena.oppoScore+=1;}
       scoreBoard.updateScore(gameArena.myScore,gameArena.oppoScore);
