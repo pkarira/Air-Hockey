@@ -7,8 +7,10 @@ function ball(radius, color, x, y,context)
   color=color;
   this.update = function(){
     context.beginPath();
-    context.fillStyle = color;
-    context.arc(this.x,this.y,radius,0,2*Math.PI);
+    context.fillStyle = "red";
+    context.shadowBlur = 20;
+    context.shadowColor = "red";
+    context.arc(this.x,this.y,radius,0,2*Math.PI,false);
     context.fill();
   }
 }
@@ -26,6 +28,8 @@ function goalPost(width,color,context,canvasWidth,canvasHeight)
     context.moveTo(canvasWidth/2-width/2,0);
     context.lineTo(canvasWidth/2+width/2,0);
     context.stroke();
+    context.shadowBlur = 0;
+    context.shadowColor = "blue";
     context.moveTo(canvasWidth/2-width/2,canvasHeight);
     context.lineTo(canvasWidth/2+width/2,canvasHeight);
     context.stroke();
@@ -39,9 +43,23 @@ function hockey(radius, color, x, y,context)
   radius = radius,
   color=color;
   this.update = function(){
-    context.fillStyle = color;
+    context.beginPath();
+    context.strokeStyle = "red";
+    context.arc(this.x,this.y,radius-7.5,0,2*Math.PI);
+    context.lineWidth=3;
+    context.stroke();
+    context.beginPath();
+    context.strokeStyle = "white";
+    context.shadowBlur = 40;
+    context.shadowColor = color;
     context.arc(this.x,this.y,radius,0,2*Math.PI);
-    context.fill();
+    context.lineWidth=15;
+    context.stroke();
+    context.beginPath();
+    context.strokeStyle = "red";
+    context.arc(this.x,this.y,radius+7.5,0,2*Math.PI);
+    context.lineWidth=3;
+    context.stroke();
   }
 }
 function opponentHockey(radius, color, x, y,context)
@@ -52,9 +70,23 @@ function opponentHockey(radius, color, x, y,context)
   radius = radius,
   color=color;
   this.update = function(){
-    context.fillStyle = color;
+    context.beginPath();
+    context.strokeStyle = "blue";
+    context.arc(this.x,this.y,radius-7.5,0,2*Math.PI);
+    context.lineWidth=3;
+    context.stroke();
+    context.beginPath();
+    context.strokeStyle = "white";
+    context.shadowBlur = 40;
+    context.shadowColor = color;
     context.arc(this.x,this.y,radius,0,2*Math.PI);
-    context.fill();
+    context.lineWidth=15;
+    context.stroke();
+    context.beginPath();
+    context.strokeStyle = "blue";
+    context.arc(this.x,this.y,radius+7.5,0,2*Math.PI);
+    context.lineWidth=3;
+    context.stroke();
   }
 }
 function drawCentreLine(color,context,canvasWidth,canvasHeight)
@@ -65,8 +97,11 @@ function drawCentreLine(color,context,canvasWidth,canvasHeight)
   color=color;
   this.drawLine=function()
   {
+    context.strokeStyle=color;
     context.lineWidth=10;
     context.beginPath();
+    context.shadowBlur = 0;
+    context.shadowColor = "blue";
     context.moveTo(0,canvasHeight/2);
     context.lineTo(canvasWidth,canvasHeight/2);
     context.stroke();

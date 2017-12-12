@@ -14,6 +14,7 @@ app.set('view engine','ejs');
 app.use('/style/',express.static('style'));
 app.set('views', path.join(__dirname, 'app/views'));
 app.use('/scripts/',express.static('scripts'));
+app.use('/assets/',express.static('assets'));
 app.get('/',game.login);
 app.post('/gamearena',urlParser,game.getRoom);
 app.get('/gamearena',game.getGameArena);
