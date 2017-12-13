@@ -16,5 +16,11 @@ function drawText(color,context,topX,topY,text)
 {
   context.beginPath();
   context.font = "30px Arial";
+  context.strokeStyle = 'blue';
+  context.shadowBlur = 5;
+  context.shadowColor = "blue";
+  context.lineWidth=0.3;
+  context.fillStyle = color;
   context.fillText(text,topX,topY);
+  context.strokeText(text,topX,topY);
 }

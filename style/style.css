@@ -13,7 +13,8 @@ background: #ffffff;
 }
 #scoreboard{
 margin-left: 50px;
-margin-top: 0px;
+margin-top: 10px;
+margin-bottom: 200px;
 background: #ffffff;
 }
 canvas {

@@ -1,18 +1,21 @@
 var scoreBoard={
   canvas:document.getElementById('scoreboard'),
   canvasWidth:400,
-  canvasHeight:300,
+  canvasHeight:200,
   borderWidth:10,
   intialize:function()
   {
     this.context=this.canvas.getContext("2d");
+    this.canvas.style.backgroundColor = "#01260C";
+    this.canvas.width= this.canvasWidth;
+    this.canvas.height=this.canvasHeight;
   },
   canvasDecor:function()
   {
-    canvas_border(this.context,"black",scoreBoard.canvasWidth,scoreBoard.canvasHeight,scoreBoard.borderWidth);
-    drawText("red",this.context,scoreBoard.canvasWidth/2-40,40,"Score");
-    drawText("red",this.context,20,80,"You");
-    drawText("red",this.context,scoreBoard.canvasWidth/2+20,80,"Opponent");
+    canvas_border(this.context,"white",scoreBoard.canvasWidth,scoreBoard.canvasHeight,scoreBoard.borderWidth);
+    drawText("white",this.context,scoreBoard.canvasWidth/2-40,40,"Score");
+    drawText("white",this.context,20,80,"You");
+    drawText("white",this.context,scoreBoard.canvasWidth/2+20,80,"Opponent");
   },
   clear:function()
   {
@@ -23,8 +26,8 @@ var scoreBoard={
   {
     this.clear();
     this.canvasDecor();
-    drawText("red",this.context,20,150,player1);
-    drawText("red",this.context,scoreBoard.canvasWidth/2+20,150,player2);
+    drawText("white",this.context,20,150,player1);
+    drawText("white",this.context,scoreBoard.canvasWidth/2+20,150,player2);
   }
 }
 scoreBoard.intialize();

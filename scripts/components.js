@@ -7,11 +7,19 @@ function ball(radius, color, x, y,context)
   color=color;
   this.update = function(){
     context.beginPath();
-    context.fillStyle = "red";
+    context.strokeStyle = "red";
+    context.arc(this.x,this.y,radius,0,2*Math.PI);
+    context.lineWidth=10;
     context.shadowBlur = 20;
-    context.shadowColor = "red";
-    context.arc(this.x,this.y,radius,0,2*Math.PI,false);
-    context.fill();
+    context.shadowColor = "white";
+    context.stroke();
+    context.beginPath();
+    context.strokeStyle = "blue";
+    context.shadowBlur = 20;
+    context.shadowColor = "white";
+    context.arc(this.x,this.y,radius-10,0,2*Math.PI);
+    context.lineWidth=10;
+    context.stroke();
   }
 }
 function goalPost(width,color,context,canvasWidth,canvasHeight)

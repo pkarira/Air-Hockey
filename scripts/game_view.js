@@ -21,14 +21,14 @@ var gameArena={
     this.canvas.height=this.canvasHeight;
     this.ballRadius=20,
     this.xDirection=0,
-    this.yDirection=0,
+    this.yDirection=1,
     this.win =false,
     this.result =false,
     this.borderWidth=10;
     this.canvasMarginRight=300,
     this.canvasMargintop=30,
     this.context=canvas.getContext("2d"),
-    canvas.style.backgroundColor = 'black'
+    this.canvas.style.backgroundColor = '#01260C'
     this.ball=new ball(this.ballRadius, "red", this.canvasWidth/2, this.canvasHeight/2,this.context),
     this.goalPost=new goalPost(this.canvasWidth/2, "white", this.context,this.canvasWidth,this.canvasHeight),
     this.hockey=new hockey(this.hockeyRadius, "red", this.canvasWidth/2, 3*this.canvasHeight/4,this.context),
@@ -59,11 +59,21 @@ var gameArena={
 gameArena.intialize();
 gameArena.start();
 gameArena.canvas.addEventListener('mousemove', function (e) {
-  if(e.pageY-gameArena.canvasMargintop>=gameArena.canvasWidth/2)
+  if(e.pageY-gameArena.canvasMargintop-60>=gameArena.canvasWidth/2)
   {
     newX=e.pageX-gameArena.canvasMarginRight;
     newY=e.pageY-gameArena.canvasMargintop;
-    gameArena.hockey.x=newX;gameArena.hockey.y=newY;
+    if(newX>gameArena.canvasWidth- gameArena.hockeyRadius)
+    gameArena.hockey.x=newX-gameArena.hockeyRadius-20;
+    else
+    if(newX<gameArena.hockeyRadius)
+    gameArena.hockey.x=gameArena.hockeyRadius+20;
+    else
+    gameArena.hockey.x=newX;
+    if(newY>gameArena.canvasHeight -gameArena.hockeyRadius)
+    gameArena.hockey.y=gameArena.canvasHeight -gameArena.hockeyRadius-10;
+    else
+    gameArena.hockey.y=newY;
     socket.emit('hockey_coordinates', {
       room:room,
       hockey:{
@@ -71,7 +81,7 @@ gameArena.canvas.addEventListener('mousemove', function (e) {
         y:gameArena.canvasHeight-newY
       }
     });
-    if(Math.abs(gameArena.ball.x-gameArena.hockey.x)<=2*gameArena.ballRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)<=2*gameArena.ballRadius)
+    if(Math.abs(gameArena.ball.x-gameArena.hockey.x)<=gameArena.ballRadius+gameArena.hockeyRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)<=gameArena.ballRadius+gameArena.hockeyRadius)
     {ballHockeyCollision();}
     lastX=e.pageX-gameArena.canvasMarginRight;
     lastY=e.pageY-gameArena.canvasMargintop;
@@ -92,11 +102,9 @@ function updateGameArena() {
   //   else
   //   drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Loose");
   // }
-  if((gameArena.ball.x+gameArena.ballRadius >= gameArena.canvasWidth || gameArena.ball.x-gameArena.ballRadius <= 0)&& gameArena.result !=true)
-  gameArena.xDirection*=-1;
-  if((gameArena.ball.y+gameArena.ballRadius >= gameArena.canvasHeight || gameArena.ball.y-gameArena.ballRadius <= 0) && gameArena.result !=true)
-  gameArena.yDirection*=-1;
-  if((gameArena.ball.x>= gameArena.canvasWidth/4 && gameArena.ball.x<= 3*gameArena.canvasWidth/4)&&(gameArena.ball.y>=gameArena.canvasHeight-40 || gameArena.ball.y<=40) && gameArena.result!=true)
+  if(Math.abs(gameArena.ball.x-gameArena.hockey.x)<=gameArena.ballRadius+gameArena.hockeyRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)<=gameArena.ballRadius+gameArena.hockeyRadius)
+  ballHockeyCollision();
+  if((gameArena.ball.x>= gameArena.canvasWidth/4 && gameArena.ball.x<= 3*gameArena.canvasWidth/4)&&(gameArena.ball.y>=gameArena.canvasHeight-30 || gameArena.ball.y<=30) && gameArena.result!=true)
   {
     gameArena.result=true;
     if(gameArena.ball.y<gameArena.canvasHeight/2)
@@ -122,6 +130,10 @@ function updateGameArena() {
       scoreBoard.updateScore(gameArena.myScore,gameArena.oppoScore);
       goal();
     }
+    if((gameArena.ball.x+gameArena.ballRadius >= gameArena.canvasWidth || gameArena.ball.x-gameArena.ballRadius <= 0)&& gameArena.result !=true)
+    gameArena.xDirection*=-1;
+    if((gameArena.ball.y+gameArena.ballRadius >= gameArena.canvasHeight || gameArena.ball.y-gameArena.ballRadius <= 0) && gameArena.result !=true)
+    gameArena.yDirection*=-1;
     gameArena.ball.x+=gameArena.xDirection;
     gameArena.ball.y+=gameArena.yDirection;
     gameArena.ball.update();
@@ -131,6 +143,8 @@ function updateGameArena() {
     var xDiff=newX-lastX;
     var yDiff=newY-lastY;
     console.log("collision");
+    if(xDiff!=0 && yDiff!=0)
+    {
     socket.emit('ball_coordinates', {
       room:room,
       ball:{
@@ -140,6 +154,17 @@ function updateGameArena() {
     });
     gameArena.xDirection=xDiff;
     gameArena.yDirection=yDiff;
+  }//else {
+  //   gameArena.xDirection*=(-1);
+  //   gameArena.yDirection*=(-1);
+  //   socket.emit('ball_coordinates', {
+  //     room:room,
+  //     ball:{
+  //       xDirection:gameArena.xDirection,
+  //       yDirection:gameArena.yDirection
+  //     }
+  //   });
+  // }
   }
   function goal()
   {
