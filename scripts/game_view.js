@@ -32,7 +32,7 @@ var gameArena={
     this.ball=new ball(this.ballRadius, "red", this.canvasWidth/2, this.canvasHeight/2,this.context),
     this.goalPost=new goalPost(this.canvasWidth/2, "white", this.context,this.canvasWidth,this.canvasHeight),
     this.hockey=new hockey(this.hockeyRadius, "red", this.canvasWidth/2, 3*this.canvasHeight/4,this.context),
-    this.oppoHockey=new opponentHockey(this.hockeyRadius, "blue", 20, 20,this.context),
+    this.oppoHockey=new hockey(this.hockeyRadius, "blue", 20, 20,this.context),
     this.centerLine=new drawCentreLine("white", this.context,this.canvasWidth,this.canvasHeight)
   },
   start:function()
@@ -87,11 +87,11 @@ gameArena.canvas.addEventListener('mousemove', function (e) {
     lastY=e.pageY-gameArena.canvasMargintop;
   }
 })
-gameArena.ball.update();
+gameArena.ball.update(gameArena.context);
 function updateGameArena() {
   gameArena.clear();
-  gameArena.hockey.update();
-  gameArena.oppoHockey.update();
+  gameArena.hockey.update(gameArena.context);
+  gameArena.oppoHockey.update(gameArena.context);
   gameArena.centerLine.drawLine();
   gameArena.goalPost.drawLine();
   canvas_border(gameArena.context,"white",gameArena.canvasWidth,gameArena.canvasHeight,gameArena.borderWidth);
@@ -136,7 +136,7 @@ function updateGameArena() {
     gameArena.yDirection*=-1;
     gameArena.ball.x+=gameArena.xDirection;
     gameArena.ball.y+=gameArena.yDirection;
-    gameArena.ball.update();
+    gameArena.ball.update(gameArena.context);
   }
   function ballHockeyCollision()
   {
