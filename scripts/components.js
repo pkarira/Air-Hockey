@@ -33,42 +33,34 @@ function hockey(radius, color, x, y,context)
     drawArc(this.x,this.y,color,3,0,"white",context,radius+7.5);
   }
 }
-function goalPost(width,color,context,canvasWidth,canvasHeight)
+function drawLine(strokeStyle,lineWidth,moveToX,moveToY,lineToX,lineToY,context)
+{
+  context.beginPath();
+  context.strokeStyle=strokeStyle;
+  context.lineWidth=lineWidth;
+  context.moveTo(moveToX,moveToY);
+  context.lineTo(lineToX,lineToY);
+  context.stroke();
+}
+function lineMarkings(width,color,context,canvasWidth,canvasHeight,type)
 {
   var width = width,
   canvasWidth = canvasWidth,
   canvasHeight = canvasHeight,
   context=context,
-  color=color;
+  color=color,
+  type=type;
   this.drawLine=function()
   {
-    context.lineWidth=20;
-    context.beginPath();
-    context.moveTo(canvasWidth/2-width/2,0);
-    context.lineTo(canvasWidth/2+width/2,0);
-    context.stroke();
-    context.shadowBlur = 0;
-    context.shadowColor = "blue";
-    context.moveTo(canvasWidth/2-width/2,canvasHeight);
-    context.lineTo(canvasWidth/2+width/2,canvasHeight);
-    context.stroke();
-  }
-}
-function drawCentreLine(color,context,canvasWidth,canvasHeight)
-{
-  var canvasWidth = canvasWidth,
-  canvasHeight = canvasHeight,
-  context=context,
-  color=color;
-  this.drawLine=function()
-  {
-    context.strokeStyle=color;
-    context.lineWidth=10;
-    context.beginPath();
-    context.shadowBlur = 0;
-    context.shadowColor = "blue";
-    context.moveTo(0,canvasHeight/2);
-    context.lineTo(canvasWidth,canvasHeight/2);
-    context.stroke();
+    if(type==="goalpost")
+    {
+      drawLine(color,20,canvasWidth/2-width/2,0,canvasWidth/2+width/2,0,context);
+      context.beginPath();
+      drawLine(color,20,canvasWidth/2-width/2,canvasHeight,canvasWidth/2+width/2,canvasHeight,context);
+    }else
+    if(type==="centralline")
+    {
+      drawLine(color,10,0,canvasHeight/2,canvasWidth,canvasHeight/2,context);
+    }
   }
 }

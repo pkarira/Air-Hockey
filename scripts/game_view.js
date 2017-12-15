@@ -30,10 +30,10 @@ var gameArena={
     this.context=canvas.getContext("2d"),
     this.canvas.style.backgroundColor = '#01260C'
     this.ball=new ball(this.ballRadius, "red", this.canvasWidth/2, this.canvasHeight/2,this.context),
-    this.goalPost=new goalPost(this.canvasWidth/2, "white", this.context,this.canvasWidth,this.canvasHeight),
+    this.goalPost=new lineMarkings(this.canvasWidth/2, "white", this.context,this.canvasWidth,this.canvasHeight,"goalpost"),
     this.hockey=new hockey(this.hockeyRadius, "red", this.canvasWidth/2, 3*this.canvasHeight/4,this.context),
     this.oppoHockey=new hockey(this.hockeyRadius, "blue", 20, 20,this.context),
-    this.centerLine=new drawCentreLine("white", this.context,this.canvasWidth,this.canvasHeight)
+    this.centerLine=new lineMarkings(this.canvasWidth/2,"white", this.context,this.canvasWidth,this.canvasHeight,"centralline")
   },
   start:function()
   {
