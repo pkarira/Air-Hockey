@@ -12,7 +12,7 @@ login.addEventListener('click', function(){
     window.location=url;
   }
   else
-  {
+  { 
     room=enteredRoom;
     params = "room="+room;
     if (typeof(Storage) !== "undefined") {
@@ -22,6 +22,7 @@ login.addEventListener('click', function(){
     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     http.send(params);
     http.onreadystatechange = function() {
+      console.log(http.response)
       if(http.readyState == 4 && http.status == 200) {
         if(http.responseText==="Done")
         {

@@ -17,6 +17,9 @@ app.use('/scripts/',express.static('scripts'));
 app.use('/assets/',express.static('assets'));
 app.get('/',game.login);
 app.post('/gamearena',urlParser,game.getRoom);
+app.get('/logout',game.logout);
+var cookieParser= require('cookie-parser')
+app.use(cookieParser());
 app.get('/gamearena',game.getGameArena);
 io.on('connection',function(socket) {
     console.log('made socket connection', socket.id);

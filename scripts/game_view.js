@@ -95,77 +95,80 @@ function updateGameArena() {
   gameArena.centerLine.drawLine();
   gameArena.goalPost.drawLine();
   canvas_border(gameArena.context,"white",gameArena.canvasWidth,gameArena.canvasHeight,gameArena.borderWidth);
-  // if(gameArena.result==true)
-  // {
-  //   if(gameArena.win==true)
-  //   drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Won");
-  //   else
-  //   drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Loose");
-  // }
-  if(Math.abs(gameArena.ball.x-gameArena.hockey.x)<=gameArena.ballRadius+gameArena.hockeyRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)<=gameArena.ballRadius+gameArena.hockeyRadius)
-  ballHockeyCollision();
-  if((gameArena.ball.x>= gameArena.canvasWidth/4 && gameArena.ball.x<= 3*gameArena.canvasWidth/4)&&(gameArena.ball.y>=gameArena.canvasHeight-30 || gameArena.ball.y<=30) && gameArena.result!=true)
+  if(gameArena.result==true)
   {
-    gameArena.result=true;
-    if(gameArena.ball.y<gameArena.canvasHeight/2)
+    if(gameArena.oppoScore<3 && gameArena.myScore<3)
     {
-      gameArena.myScore+=1;
-      gameArena.win=true;
+      if(gameArena.win==true)
+      drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Won");
+      else
+      drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Loose");
     }else
-      {gameArena.oppoScore+=1;}
-      if(gameArena.oppoScore<7 && gameArena.myScore<7)
-      {
-        console.log(gameArena.rounds);
-        setTimeout(function (){
-          gameArena.restart();
-        }, 2000);
-      }else
-      {
-        if(myScore==7)
-        drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Won");
-        else
-        if(oppoScore==7)
-        drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Loose");
-      }
-      scoreBoard.updateScore(gameArena.myScore,gameArena.oppoScore);
-      goal();
-    }
-    if((gameArena.ball.x+gameArena.ballRadius >= gameArena.canvasWidth || gameArena.ball.x-gameArena.ballRadius <= 0)&& gameArena.result !=true)
-    gameArena.xDirection*=-1;
-    if((gameArena.ball.y+gameArena.ballRadius >= gameArena.canvasHeight || gameArena.ball.y-gameArena.ballRadius <= 0) && gameArena.result !=true)
-    gameArena.yDirection*=-1;
-    gameArena.ball.x+=gameArena.xDirection;
-    gameArena.ball.y+=gameArena.yDirection;
-    gameArena.ball.update(gameArena.context);
-  }
-  function ballHockeyCollision()
-  {
-    var xDiff=newX-lastX;
-    var yDiff=newY-lastY;
-    console.log("collision");
-    if(xDiff!=0 && yDiff!=0)
     {
-    socket.emit('ball_coordinates', {
-      room:room,
-      ball:{
-        xDirection:xDiff*(-1),
-        yDirection:yDiff*(-1)
+      if(gameArena.myScore==3)
+      {
+        drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Won");}
+        else
+        if(gameArena.oppoScore==7)
+        drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Loose");}
       }
-    });
-    gameArena.xDirection=xDiff;
-    gameArena.yDirection=yDiff;
-  }//else {
-  //   gameArena.xDirection*=(-1);
-  //   gameArena.yDirection*=(-1);
-  //   socket.emit('ball_coordinates', {
-  //     room:room,
-  //     ball:{
-  //       xDirection:gameArena.xDirection,
-  //       yDirection:gameArena.yDirection
-  //     }
-  //   });
-  // }
-  }
-  function goal()
-  {
-  }
+      if(Math.abs(gameArena.ball.x-gameArena.hockey.x)<=gameArena.ballRadius+gameArena.hockeyRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)<=gameArena.ballRadius+gameArena.hockeyRadius)
+      ballHockeyCollision();
+      if((gameArena.ball.x>= gameArena.canvasWidth/4 && gameArena.ball.x<= 3*gameArena.canvasWidth/4)&&(gameArena.ball.y>=gameArena.canvasHeight-30 || gameArena.ball.y<=30) && gameArena.result!=true)
+      {
+        gameArena.result=true;
+        if(gameArena.ball.y<gameArena.canvasHeight/2)
+        {
+          gameArena.myScore+=1;
+          gameArena.win=true;
+        }else
+        {gameArena.oppoScore+=1;}
+        if(gameArena.oppoScore<3 && gameArena.myScore<3)
+        {
+          console.log(gameArena.rounds);
+          setTimeout(function (){
+            gameArena.restart();
+          }, 2000);
+        }
+        scoreBoard.updateScore(gameArena.myScore,gameArena.oppoScore);
+        goal();
+      }
+      if((gameArena.ball.x+gameArena.ballRadius >= gameArena.canvasWidth || gameArena.ball.x-gameArena.ballRadius <= 0)&& gameArena.result !=true)
+      gameArena.xDirection*=-1;
+      if((gameArena.ball.y+gameArena.ballRadius >= gameArena.canvasHeight || gameArena.ball.y-gameArena.ballRadius <= 0) && gameArena.result !=true)
+      gameArena.yDirection*=-1;
+      gameArena.ball.x+=gameArena.xDirection;
+      gameArena.ball.y+=gameArena.yDirection;
+      gameArena.ball.update(gameArena.context);
+    }
+    function ballHockeyCollision()
+    {
+      var xDiff=newX-lastX;
+      var yDiff=newY-lastY;
+      console.log("collision");
+      if(xDiff!=0 && yDiff!=0)
+      {
+        socket.emit('ball_coordinates', {
+          room:room,
+          ball:{
+            xDirection:xDiff*(-1),
+            yDirection:yDiff*(-1)
+          }
+        });
+        gameArena.xDirection=xDiff;
+        gameArena.yDirection=yDiff;
+      }//else {
+        //   gameArena.xDirection*=(-1);
+        //   gameArena.yDirection*=(-1);
+        //   socket.emit('ball_coordinates', {
+        //     room:room,
+        //     ball:{
+        //       xDirection:gameArena.xDirection,
+        //       yDirection:gameArena.yDirection
+        //     }
+        //   });
+        // }
+      }
+      function goal()
+      {
+      }

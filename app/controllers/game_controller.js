@@ -18,28 +18,39 @@ module.exports.getRoom=function(request,response)
       const query = client.query(roomQuery, (err, res) => {
         // console.log(res.rows);
       });
+      response.cookie("log_in","true",{});
       response.send("Done");
     }else
-    response.send("Error");
+    {
+      response.cookie("log_in","false",{});
+      response.send("Error");}
   });
 };
 module.exports.getGameArena=function(request,response)
 {
+  if(request.cookies['log_in']=="true")
   response.render("game_view");
+  else
+  response.send("You are not logged in");
 }
-  module.exports.login=function(request,response)
-  {
-    roomId=makeId()
-    response.render("login",{id:roomId});
-  };
-  function makeId() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (var i = 0; i < 5; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-    var roomId = new Array(text);
-    const query = client.query('INSERT INTO rooms (room) VALUES ($1)', roomId, function(err,result){
-      //console.log(result);
-    });
-    return text;
-  }
+module.exports.login=function(request,response)
+{
+  roomId=makeId()
+  response.cookie("log_in","true",{});
+  response.render("login",{id:roomId});
+};
+module.exports.logout=function(request,response)
+{
+response.cookie("log_in","false",{});
+}
+function makeId() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (var i = 0; i < 5; i++)
+  text += possible.charAt(Math.floor(Math.random() * possible.length));
+  var roomId = new Array(text);
+  const query = client.query('INSERT INTO rooms (room) VALUES ($1)', roomId, function(err,result){
+    //console.log(result);
+  });
+  return text;
+}
