@@ -7,12 +7,23 @@ if (typeof(Storage) !== "undefined") {
 socket.on('connect', function() {
   socket.emit('room', room);
 });
-var gameArena={
+window.closed=function()
+{
+  return "Do you r to close?";
+}
+// window.onbeforeunload = function () {
+//     return "Do you rnt to close?";
+// };
+// window.onunload = function () {
+//     return "Do yowant to close?";
+// };
+ var gameArena={
   canvas:document.getElementById('canvas'),
   intialize:function()
   {
     this.canvasWidth=500;
     this.canvasHeight=600;
+    this.singleCollision=false,
     this.hockeyRadius=20;
     this.myScore=0;
     this.oppoScore=0;
@@ -82,7 +93,9 @@ gameArena.canvas.addEventListener('mousemove', function (e) {
       }
     });
     if(Math.abs(gameArena.ball.x-gameArena.hockey.x)<=gameArena.ballRadius+gameArena.hockeyRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)<=gameArena.ballRadius+gameArena.hockeyRadius)
-    {ballHockeyCollision();}
+    {
+      gameArena.singleCollision=true;
+      ballHockeyCollision();}
     lastX=e.pageX-gameArena.canvasMarginRight;
     lastY=e.pageY-gameArena.canvasMargintop;
   }
@@ -94,10 +107,14 @@ function updateGameArena() {
   gameArena.oppoHockey.update(gameArena.context);
   gameArena.centerLine.drawLine();
   gameArena.goalPost.drawLine();
+    if(Math.abs(gameArena.ball.x-gameArena.hockey.x)>gameArena.ballRadius+gameArena.hockeyRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)>gameArena.ballRadius+gameArena.hockeyRadius && gameArena.singleCollision==true)
+    {
+      gameArena.singleCollision=false;
+    }
   canvas_border(gameArena.context,"white",gameArena.canvasWidth,gameArena.canvasHeight,gameArena.borderWidth);
   if(gameArena.result==true)
   {
-    if(gameArena.oppoScore<3 && gameArena.myScore<3)
+    if(gameArena.oppoScore<7 && gameArena.myScore<7)
     {
       if(gameArena.win==true)
       drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Won");
@@ -105,15 +122,15 @@ function updateGameArena() {
       drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Loose");
     }else
     {
-      if(gameArena.myScore==3)
+      if(gameArena.myScore==7)
       {
         drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Won");}
         else
         if(gameArena.oppoScore==7)
         drawText("red", gameArena.context,gameArena.canvasWidth/2,gameArena.canvasHeight/2,"You Loose");}
       }
-      if(Math.abs(gameArena.ball.x-gameArena.hockey.x)<=gameArena.ballRadius+gameArena.hockeyRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)<=gameArena.ballRadius+gameArena.hockeyRadius)
-      ballHockeyCollision();
+      if(Math.abs(gameArena.ball.x-gameArena.hockey.x)<=gameArena.ballRadius+gameArena.hockeyRadius && Math.abs(gameArena.ball.y-gameArena.hockey.y)<=gameArena.ballRadius+gameArena.hockeyRadius && !gameArena.singleCollision)
+      ballCollidingStableHockey();
       if((gameArena.ball.x>= gameArena.canvasWidth/4 && gameArena.ball.x<= 3*gameArena.canvasWidth/4)&&(gameArena.ball.y>=gameArena.canvasHeight-30 || gameArena.ball.y<=30) && gameArena.result!=true)
       {
         gameArena.result=true;
@@ -123,7 +140,7 @@ function updateGameArena() {
           gameArena.win=true;
         }else
         {gameArena.oppoScore+=1;}
-        if(gameArena.oppoScore<3 && gameArena.myScore<3)
+        if(gameArena.oppoScore<7 && gameArena.myScore<7)
         {
           console.log(gameArena.rounds);
           setTimeout(function (){
@@ -157,17 +174,19 @@ function updateGameArena() {
         });
         gameArena.xDirection=xDiff;
         gameArena.yDirection=yDiff;
-      }//else {
-        //   gameArena.xDirection*=(-1);
-        //   gameArena.yDirection*=(-1);
-        //   socket.emit('ball_coordinates', {
-        //     room:room,
-        //     ball:{
-        //       xDirection:gameArena.xDirection,
-        //       yDirection:gameArena.yDirection
-        //     }
-        //   });
-        // }
+      }
+      }
+      function ballCollidingStableHockey()
+      {
+          gameArena.xDirection*=(-1);
+          gameArena.yDirection*=(-1);
+          socket.emit('ball_coordinates', {
+            room:room,
+            ball:{
+              xDirection:gameArena.xDirection,
+              yDirection:gameArena.yDirection
+            }
+          });
       }
       function goal()
       {
