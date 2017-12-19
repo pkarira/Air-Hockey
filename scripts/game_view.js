@@ -111,7 +111,7 @@ function updateGameArena() {
     {
       gameArena.singleCollision=false;
     }
-  canvas_border(gameArena.context,"white",gameArena.canvasWidth,gameArena.canvasHeight,gameArena.borderWidth);
+  canvas_border(gameArena.context,"white",gameArena.canvasWidth,gameArena.canvasHeight,gameArena.borderWidth,0);
   if(gameArena.result==true)
   {
     if(gameArena.oppoScore<7 && gameArena.myScore<7)

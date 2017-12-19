@@ -54,9 +54,9 @@ function lineMarkings(width,color,context,canvasWidth,canvasHeight,type)
   {
     if(type==="goalpost")
     {
-      drawLine(color,20,canvasWidth/2-width/2,0,canvasWidth/2+width/2,0,context);
+      drawLine(color,30,canvasWidth/2-width/2,0,canvasWidth/2+width/2,0,context);
       context.beginPath();
-      drawLine(color,20,canvasWidth/2-width/2,canvasHeight,canvasWidth/2+width/2,canvasHeight,context);
+      drawLine(color,30,canvasWidth/2-width/2,canvasHeight,canvasWidth/2+width/2,canvasHeight,context);
     }else
     if(type==="centralline")
     {
