@@ -4,18 +4,32 @@ var scoreBoard={
   canvasWidth:400,
   canvasHeight:400,
   borderWidth:10,
-  drawTitle:function()
+  interval:0,
+  player1Score:0,
+  player2Score:0,
+  drawTitle:function(text)
   {
     var stroke="red";
     var context=this.context;
-    var b=setInterval(function()
+    this.interval=setInterval(function()
     {
-      drawText("white",context,20,100,"AIR HOCKEY",60,stroke);
+      drawText("white",context,20,100,text,60,stroke);
       if(stroke=="blue")
       stroke="red";
       else
       stroke="blue";
     },500);
+  },
+  updateWinner:function(text)
+  {
+    clearInterval(this.interval);
+    this.updateScore(this.player1Score,this.player2Score);
+    drawText("white",this.context,20,100,text,60,"red");
+    setTimeout(function()
+    {
+      scoreBoard.updateScore(scoreBoard.player1Score,scoreBoard.player2Score);
+      scoreBoard.drawTitle("AIR HOCKEY");
+    }, 2000);
   },
   intialize:function()
   {
@@ -41,9 +55,11 @@ var scoreBoard={
   {
     this.clear();
     this.canvasDecor();
+    this.player2Score=player2;
+    this.player1Score=player1;
     drawText("white",this.context,20,scoreBoard.canvasHeight/2+150,player1,30);
     drawText("white",this.context,scoreBoard.canvasWidth/2+20,scoreBoard.canvasHeight/2+150,player2,30);
   }
 }
 scoreBoard.intialize();
-scoreBoard.drawTitle();
+scoreBoard.drawTitle("AIR HOCKEY");

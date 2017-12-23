@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="style/style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+  <link rel="stylesheet" href="style/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 </head>
 <body >
-<div id="container">
-<canvas id="canvas" background-color="#000000" style="border:1px solid blue;">
-Your browser does not support the HTML5 canvas tag.
-</canvas>
-<canvas id="scoreboard" >
-Your browser does not support the HTML5 canvas tag.
-</canvas>
-</div>
-</body>
-<script src= "/scripts/canvas_decorator.js"></script>
-<script src= "/scripts/components.js"></script>
-<script src= "/scripts/score_board.js"></script>
-<script src= "/scripts/game_view.js"></script>
-<script src= "/scripts/opponent.js"></script>
-</html>
+  <audio id="goal">
+    <source src="/assets/goal.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="hit">
+      <source src="/assets/hit.mp3" type="audio/mpeg">
+      </audio>
+      <div id="container">
+        <canvas id="canvas" background-color="#000000" style="border:1px solid blue;">
+          Your browser does not support the HTML5 canvas tag.
+        </canvas>
+        <canvas id="scoreboard" >
+          Your browser does not support the HTML5 canvas tag.
+        </canvas>
+      </div>
+    </body>
+    <script src= "/scripts/canvas_decorator.js"></script>
+    <script src= "/scripts/components.js"></script>
+    <script src= "/scripts/score_board.js"></script>
+    <script src= "/scripts/game_view.js"></script>
+    <script src= "/scripts/opponent.js"></script>
+    </html>
