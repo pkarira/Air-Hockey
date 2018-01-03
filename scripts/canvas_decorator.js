@@ -1,4 +1,4 @@
-function canvas_border(context,color,canvasWidth,canvasHeight,borderWidth,biasY)
+function canvas_border(context,color,canvasWidth,canvasHeight,borderWidth,biasY,strokeStyle)
 {
   context.lineWidth=borderWidth;
   context.beginPath();
@@ -13,7 +13,7 @@ function canvas_border(context,color,canvasWidth,canvasHeight,borderWidth,biasY)
   context.lineTo(0,0+biasY);
   context.stroke();
   context.beginPath();
-  context.strokeStyle = "blue";
+  context.strokeStyle = strokeStyle;
   context.moveTo(7,7+biasY);
   context.lineWidth=3;
   context.lineTo(canvasWidth-7,7+biasY);

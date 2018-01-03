@@ -13,6 +13,7 @@ var scoreBoard={
     var context=this.context;
     this.interval=setInterval(function()
     {
+      scoreBoard.updateScore(scoreBoard.player1Score,scoreBoard.player2Score);
       drawText("white",context,20,100,text,60,stroke);
       if(stroke=="blue")
       stroke="red";
@@ -40,7 +41,7 @@ var scoreBoard={
   },
   canvasDecor:function()
   {
-    canvas_border(this.context,"white",scoreBoard.canvasWidth,scoreBoard.canvasHeight,scoreBoard.borderWidth,scoreBoard.canvasHeight/2);
+    canvas_border(this.context,"white",scoreBoard.canvasWidth,scoreBoard.canvasHeight,scoreBoard.borderWidth,scoreBoard.canvasHeight/2,"blue");
     drawText("white",this.context,scoreBoard.canvasWidth/2-40,scoreBoard.canvasHeight/2+40,"Score",30);
     drawText("white",this.context,20,scoreBoard.canvasHeight/2+80,"You",30);
     drawText("white",this.context,scoreBoard.canvasWidth/2+20,scoreBoard.canvasHeight/2+80,"Opponent",30);

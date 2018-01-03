@@ -1,6 +1,5 @@
 var express=require('express'),
 socket = require('socket.io'),
-io = socket(server),
 bodyParser = require('body-parser'),
 app=express(),
 path = require('path'),
@@ -22,15 +21,21 @@ var cookieParser= require('cookie-parser')
 app.use(cookieParser());
 app.get('/gamearena',game.getGameArena);
 io.on('connection',function(socket) {
-    console.log('made socket connection', socket.id);
-    socket.on('room', function(room) {
-      console.log('room', room);
-         socket.join(room);
-     });
-    socket.on('ball_coordinates', function(data){
+  console.log('made socket connection', socket.id);
+  socket.on('room', function(room) {
+    console.log('room', room);
+    socket.join(room);
+    var rooms = io.nsps['/'].adapter.rooms[room];
+    if(rooms.length==2)
+    io.sockets.in(room).emit('joined',"");
+    else
+    if(rooms.length>2)
+    io.sockets.broadcast.emit("sorry", "");
+  });
+  socket.on('ball_coordinates', function(data){
     socket.in(data.room).broadcast.emit('ball_coordinates', data);
-   });
-   socket.on('hockey_coordinates', function(data){
-   socket.in(data.room).broadcast.emit('hockey_coordinates', data);
+  });
+  socket.on('hockey_coordinates', function(data){
+    socket.in(data.room).broadcast.emit('hockey_coordinates', data);
   });
 });
