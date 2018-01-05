@@ -12,12 +12,13 @@
       <source src="/assets/hit.mp3" type="audio/mpeg">
       </audio>
       <div id="container">
-        <canvas id="canvas" background-color="#000000" style="border:1px solid blue;">
+        <canvas id="canvas" width="500" height="600" background-color="#000000" style="border:1px solid blue;">
           Your browser does not support the HTML5 canvas tag.
         </canvas>
-        <canvas id="scoreboard" >
+        <canvas id="scoreboard" width="400" height="400" >
           Your browser does not support the HTML5 canvas tag.
         </canvas>
+          <button id="restart" color="#ffffff" style="float: right;" onclick="gameRestart()">RESTART</button>
       </div>
     </body>
     <script src= "/scripts/canvas_decorator.js"></script>

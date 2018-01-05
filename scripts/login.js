@@ -12,7 +12,7 @@ login.addEventListener('click', function(){
     window.location=url;
   }
   else
-  { 
+  {
     room=enteredRoom;
     params = "room="+room;
     if (typeof(Storage) !== "undefined") {

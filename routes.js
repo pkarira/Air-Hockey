@@ -38,4 +38,7 @@ io.on('connection',function(socket) {
   socket.on('hockey_coordinates', function(data){
     socket.in(data.room).broadcast.emit('hockey_coordinates', data);
   });
+  socket.on('restart', function(data){
+    socket.in(data.room).broadcast.emit('restart',"");
+  });
 });

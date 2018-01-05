@@ -1,29 +1,21 @@
-var lastX,lastY,newX,newY,
+var lastX,lastY,newX,newY;
 url='http://127.0.0.1:4000/',
 socket = io.connect(url);
 goalClip=document.getElementById("goal");
 hitClip=document.getElementById("hit");
-var gameArena;
+restart=document.getElementById("restart");
+var gameArena,gameCanvas=document.getElementById('canvas'),gameContext=gameCanvas.getContext("2d");
 if (typeof(Storage) !== "undefined") {
   room=localStorage.getItem("room");
 }
+drawText("red",gameContext,10,300,"Please wait for other player",40,"blue");
 socket.on('connect', function() {
   socket.emit('room', room);
 });
-window.closed=function()
-{
-  return "Do you r to close?";
-}
-// window.onbeforeunload = function () {
-//     return "Do you rnt to close?";
-// };
-// window.onunload = function () {
-//     return "Do yowant to close?";
-// };
 socket.on('joined',function(){
   console.log("joined");
   gameArena={
-    canvas:document.getElementById('canvas'),
+    canvas:gameCanvas,
     intialize:function()
     {
       this.canvasWidth=500;
@@ -46,7 +38,7 @@ socket.on('joined',function(){
       this.borderWidth=10;
       this.canvasMarginRight=300,
       this.canvasMargintop=30,
-      this.context=canvas.getContext("2d"),
+      this.context=gameContext,
       this.canvas.style.backgroundColor = '#01260C'
       this.ball=new ball(this.ballRadius, "red", this.canvasWidth/2, this.canvasHeight/2,this.context),
       this.goalPost=new lineMarkings(this.canvasWidth/2, "white", this.context,this.canvasWidth,this.canvasHeight,"goalpost"),
@@ -234,3 +226,20 @@ socket.on('joined',function(){
       {
         alert("please choose other partner");
       })
+      socket.on("restart",function()
+      {
+        restart();
+      })
+      function gameRestart()
+      {
+        socket.emit('restart', {
+          room:room,
+        });
+        restart();
+      }
+      function restart()
+      {
+        gameArena.oppoScore=0;
+        gameArena.myScore=0;
+        gameArena.restart();
+      }
