@@ -3,7 +3,10 @@ var room;
 // for postgres refer codementor articles
 var pg = require('pg');
 var format = require('pg-format')
-var conString = "postgres://pulkit:pulkit@localhost:5432/pulkit";
+var env = process.env.NODE_ENV || 'development';
+var config = require("../../config")[env];
+var url = config.database.url;
+var conString = url;
 var client = new pg.Client(conString);
 client.connect();
 module.exports.getRoom=function(request,response)
@@ -36,6 +39,7 @@ module.exports.getRoom=function(request,response)
   }
   module.exports.login=function(request,response)
   {
+    console.log(request.connection.remoteAddress);
     roomId=makeId()
     response.cookie("log_in","true",{});
     response.render("login",{id:roomId});
