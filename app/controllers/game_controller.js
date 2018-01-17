@@ -5,7 +5,7 @@ var pg = require('pg');
 var format = require('pg-format')
 var env = process.env.NODE_ENV || 'development';
 var config = require("../../config")[env];
-var url = config.database.url;
+var url = "postgres://rcclnkas:7AqANVLa5sJo7ouH1Yp-takU1IDSZVW1@baasu.db.elephantsql.com:5432/rcclnkas";
 var conString = url;
 var client = new pg.Client(conString);
 client.connect();
